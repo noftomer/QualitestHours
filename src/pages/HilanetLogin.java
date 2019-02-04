@@ -31,10 +31,10 @@ public class HilanetLogin extends ManagePage {
 			this.userName.sendKeys(userName);
 			this.password.sendKeys(password);
 			this.btn.click();
-			stepPass("Filled login form with user "+userName+" with password "+password);
+			stepPass("Filled login form with id and password");
 		}
 		catch (Exception e) {
-			stepFail("didnt filled login form with user "+userName+" with password "+password);
+			stepFail("didnt filled login form with id and password because "+e.getMessage());
 			failOfTestCase(e.getMessage());
 		}
 		

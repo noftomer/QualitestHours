@@ -35,10 +35,10 @@ public class MalamLoginPage extends  ManagePage {
 			this.employeeID.sendKeys(empID);
 			this.password.sendKeys(pass);
 			loginBtn.click();
-			stepPass("Filled login form->company: "+companyNumber+", employeeid: "+empID);
+			stepPass("Filled login form->company , employeeid and password");
 		}
 		catch (Exception e) {
-			stepFail("Didnt Filled login form->company: "+companyNumber+", employeeid: "+empID);
+			stepFail("Didnt Filled login form->company , employeeid and password because "+e.getMessage());
 			failOfTestCase(e.getMessage());
 		}
 	}

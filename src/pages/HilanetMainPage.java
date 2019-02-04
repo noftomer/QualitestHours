@@ -36,7 +36,7 @@ public class HilanetMainPage extends ManagePage{
 			stepPass("Go to hours table");
 		}
 		catch (Exception e) {
-			stepFail("didnt go to hours table");
+			stepFail("didnt go to hours table because "+e.getMessage());
 			failOfTestCase(e.getMessage());
 		}
 	}

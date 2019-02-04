@@ -98,6 +98,7 @@ public class HilanetTableHours extends ManagePage{
 					((JavascriptExecutor)driver).executeScript("arguments[0].style.border='1px solid red'",sumElem);
 					String sum=sumElem.getText();
 					stepPass("Found day "+(i+1));
+					((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true)",dayElem);
 					
 					daysToReport.add(new ReportType(day, entry, exit, sum));
 					//System.out.println("index"+i+"=> day="+day+" entry="+entry+" exit="+exit+" sum="+sum);

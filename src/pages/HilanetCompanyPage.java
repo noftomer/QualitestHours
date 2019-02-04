@@ -29,11 +29,11 @@ public class HilanetCompanyPage extends ManagePage{
 		{
 			companyID.sendKeys(companyNumber);
 			btnContinue.click();
-			stepPass("Filled the form with company number "+companyNumber);
+			stepPass("Filled the form with company number ");
 		}
 		catch (Exception e) {
 			// TODO: handle exception
-			stepFail("didnt filled the form with company number "+companyNumber);
+			stepFail("didnt filled the form with company number because "+e.getMessage());
 			failOfTestCase(e.getMessage());
 		}
 	}

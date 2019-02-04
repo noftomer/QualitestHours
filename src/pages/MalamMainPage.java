@@ -17,15 +17,25 @@ public class MalamMainPage extends ManagePage {
 
 	@FindBy(how=How.CSS,using="*[id='pt1:timesheet__31410110'] td[class='x113']")
 	private WebElement pressnetOption;
+	
+	@FindBy(how=How.ID,using="pt1:theDashboard")
+	private WebElement dashBoard;
+	
 	public MalamMainPage(WebDriver driver) {
 		super(driver);
 		// TODO Auto-generated constructor stub
 	}
-
+	private void hideDashBoard() throws IOException, ParserConfigurationException, SAXException {
+		CommonOps.waitForElementToBeVisible(dashBoard, "dashboar");
+		((JavascriptExecutor)this.driver).executeScript("arguments[0].style.visibility='hidden';", dashBoard);
+		//visibility:hidden
+	}
 	public void goToHoursTable() throws IOException, ParserConfigurationException, SAXException
 	{
 		try
 		{
+			
+			hideDashBoard();
 			presentDropDown.click();
 			CommonOps.waitForElementToBeVisible(pressnetOption, "Nochechut");
 			pressnetOption.click();
