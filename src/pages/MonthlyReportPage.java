@@ -1,15 +1,21 @@
 package pages;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.*;
+import org.xml.sax.SAXException;
 
 import classes.ExcelFileHandle;
 import classes.ReportType;
 import utilities.Base;
+import utilities.CommonOps;
+import utilities.ElementOpertions;
 
 public class MonthlyReportPage extends ManagePage {
 
@@ -20,31 +26,54 @@ public class MonthlyReportPage extends ManagePage {
 	@FindBy(how=How.ID,using="d1::msgDlg::cancel")
 	private WebElement okAfterSave;
 
+	@FindBy(how=How.CSS,using="input[id^='pt1:dataTable:'][id$=':clockInDate::content']")
+	private List<WebElement> daysOfWorkInCurrentMonth;
+	
 	private final String BEGINING="pt1:dataTable:";
 	private final String ENDING="::content";
-	//enter date
-	//id=pt1:dataTable:0:clockInDate::content
-	//id=pt1:dataTable:1:clockInDate::content
-	//id=pt1:dataTable:2:clockInDate::content
-
-	//exit date
-	//id=pt1:dataTable:0:clockOutDate::content
-	//id=pt1:dataTable:1:clockOutDate::content
-	//id=pt1:dataTable:2:clockOutDate::content
-
-	//enter hour
-	//id=pt1:dataTable:0:clockInTime::content
-	//id=pt1:dataTable:1:clockInTime::content
-
-	//exit hour
-	//id=pt1:dataTable:0:clockOutTime::content
-
-	public MonthlyReportPage(WebDriver driver) {
+		public MonthlyReportPage(WebDriver driver) {
 		super(driver);
 		// TODO Auto-generated constructor stub
 	}
-	public void importHours(List<ReportType> days)
+
+		public void validateHoursFromSourceEqualsToDestintion(List<ReportType> days)
+		{
+			//pt1:dataTable:0:hourTotalLabel
+			//pt1:dataTable:1:hourTotalLabel
+			//pt1:dataTable:2:hourTotalLabel
+			//pt1:dataTable:3:hourTotalLabel
+			
+			String start="pt1:dataTable:";
+			String end=":hourTotalLabel";
+			try {
+				//days=readCsvFile(fileName);
+				int dayCounter=0;
+				for(int day=0;day<days.size();day++) {
+					try {
+						WebElement hoursOfDay=driver.findElement(By.id(start+String.valueOf(day)+end));
+						if(hoursOfDay.getText().equals(days.get(day).getTimePerDay())) {
+							paintSuccess(driver, hoursOfDay);
+						}
+						else {
+							paintFail(driver, hoursOfDay);
+						}
+							
+					}
+					catch(Exception e) {
+						stepFail(e.getMessage());
+					}
+					
+				}
+			}
+			catch (Exception e) {
+				System.err.println(e.getMessage());
+				// TODO: handle exception
+			}
+		}
+		
+	public void importHours(List<ReportType> days) throws IOException, ParserConfigurationException, SAXException
 	{
+		
 		//List<ReportType> days=null;
 		try {
 			//days=readCsvFile(fileName);
@@ -66,27 +95,32 @@ public class MonthlyReportPage extends ManagePage {
 				try {
 					dayOfMalam=this.driver.findElement(By.id(BEGINING+(dayCounter)+":clockInDate"+ENDING));
 					paintSuccess(driver,dayOfMalam);
-					//dayOfMalam.clear();
-					//dayOfMalam.sendKeys(days.get(day).getDay());
 					String entery=days.get(day).getEntryTime();
 					String exit=days.get(day).getExitTime();
 
 					WebElement dayOfMalamEnter=this.driver.findElement(By.id(BEGINING+dayCounter+":clockInDate"+ENDING));
-					//id=pt1:dataTable:0:clockOutDate::content
 					WebElement dayOfMalamExit=this.driver.findElement(By.id(BEGINING+dayCounter+":clockOutDate"+ENDING));
 					if(days.get(day).getEntryTime().equals(" ") || days.get(day).getEntryTime().equals("") || days.get(day).getExitTime().equals(" ") || days.get(day).getExitTime().equals("")) {
 						paintFail(driver,dayOfMalamEnter);
 						paintFail(driver,dayOfMalamExit);
+						
+						WebElement reportCodeCombobox=driver.findElement(By.id("pt1:dataTable:"+String.valueOf(dayCounter)+":workTypeSelect::content"));
+						String reportTypeText=days.get(day).getReportType();
+						CommonOps.selectDropDownByVisibleText(reportCodeCombobox, reportTypeText);
+						
 						throw new Exception("The enter time or exit time of day "+days.get(dayCounter).getDay()+" is empty");
 					}
 					else {
 						WebElement startHour=this.driver.findElement(By.id(BEGINING+dayCounter+":clockInTime"+ENDING));
-						startHour.clear();
-						startHour.sendKeys(days.get(day).getEntryTime());
+						CommonOps.typeTextInTexbox(driver,startHour, "Enter hour",days.get(day).getEntryTime());
+						//startHour.clear();
+						//startHour.sendKeys(days.get(day).getEntryTime());
 						WebElement endHour=this.driver.findElement(By.id(BEGINING+dayCounter+":clockOutTime"+ENDING));
-						endHour.clear();
-						endHour.sendKeys(days.get(day).getExitTime());
+						CommonOps.typeTextInTexbox(driver, endHour, "Exit hour", days.get(day).getExitTime());
+						//endHour.clear();
+						//endHour.sendKeys(days.get(day).getExitTime());
 						System.out.println(days.get(day).getDay()+", "+days.get(day).getEntryTime()+", "+days.get(day).getExitTime()+", "+days.get(day).getTimePerDay());
+						
 						((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);",dayOfMalamEnter);
 						paintSuccess(driver,dayOfMalamEnter);
 						paintSuccess(driver,dayOfMalamExit);
@@ -100,47 +134,15 @@ public class MonthlyReportPage extends ManagePage {
 				}
 				dayCounter++;
 			}
-			saveBtn.click();
-			okAfterSave.click();
-//			for(int day=0;day<days.size();day++)
-//			{
-//				try {
-//					//WebElement dayOfMalam=this.driver.findElement(By.id(BEGINING+(day+1)+":clockInDate"+ENDING));
-//					//dayOfMalam.clear();
-//					//dayOfMalam.sendKeys(days.get(day).getDay());
-//					String entery=days.get(day).getEntryTime();
-//					String exit=days.get(day).getExitTime();
-//
-//					WebElement dayOfMalamEnter=this.driver.findElement(By.id(BEGINING+day+":clockInDate"+ENDING));
-//					//id=pt1:dataTable:0:clockOutDate::content
-//					WebElement dayOfMalamExit=this.driver.findElement(By.id(BEGINING+day+":clockOutDate"+ENDING));
-//					if(days.get(day).getEntryTime().equals(" ") || days.get(day).getEntryTime().equals("") || days.get(day).getExitTime().equals(" ") || days.get(day).getExitTime().equals("")) {
-//						paintFail(driver,dayOfMalamEnter);
-//						paintFail(driver,dayOfMalamExit);
-//						throw new Exception("The enter time or exit time of day "+days.get(day).getDay()+" is empty");
-//					}
-//					else {
-//						WebElement startHour=this.driver.findElement(By.id(BEGINING+day+":clockInTime"+ENDING));
-//						startHour.clear();
-//						startHour.sendKeys(days.get(day).getEntryTime());
-//						WebElement endHour=this.driver.findElement(By.id(BEGINING+day+":clockOutTime"+ENDING));
-//						endHour.clear();
-//						endHour.sendKeys(days.get(day).getExitTime());
-//						System.out.println(days.get(day).getDay()+", "+days.get(day).getEntryTime()+", "+days.get(day).getExitTime()+", "+days.get(day).getTimePerDay());
-//						((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);",dayOfMalamEnter);
-//						paintSuccess(driver,dayOfMalamEnter);
-//						paintSuccess(driver,dayOfMalamExit);
-//						stepPass("Day="+(day+1));
-//						//sleep();
-//					}
-//
-//				}
-//				catch(Exception e) {
-//					stepFail(e.getMessage());
-//				}
-//			}
-//			saveBtn.click();
-//			okAfterSave.click();
+			CommonOps.excuteOpertionOnElement(driver, saveBtn, "Save button", ElementOpertions.CLICK);
+			//saveBtn.click();
+			CommonOps.excuteOpertionOnElement(driver, okAfterSave, "OK button", ElementOpertions.CLICK);
+			//okAfterSave.click();
+			//pt1:dataTable:0:clockInDate::content
+			//pt1:dataTable:
+			//							 ::content
+//			WebElement dayOfMalamEnter=this.driver.findElement(By.id(BEGINING+"0:clockInDate"+ENDING));
+//			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);",dayOfMalamEnter);
 		}
 		catch (Exception e) {
 			System.err.println(e.getMessage());
@@ -162,7 +164,8 @@ public class MonthlyReportPage extends ManagePage {
 				String entry=ExcelFileHandle.getCellData(row, 1);
 				String exit=ExcelFileHandle.getCellData(row, 2);
 				String sum=ExcelFileHandle.getCellData(row, 3);
-				hours.add(new ReportType(day, entry, exit, sum));
+				String reportType=ExcelFileHandle.getCellData(row, 4);
+				hours.add(new ReportType(day, entry, exit, sum,reportType));
 				System.out.println(hours.get(row-1));
 			}
 			row++;

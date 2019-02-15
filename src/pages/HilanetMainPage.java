@@ -13,6 +13,7 @@ import org.xml.sax.SAXException;
 
 import utilities.Base;
 import utilities.CommonOps;
+import utilities.ElementOpertions;
 
 public class HilanetMainPage extends ManagePage{
 
@@ -29,10 +30,12 @@ public class HilanetMainPage extends ManagePage{
 	{
 		try
 		{
-			Actions action=new Actions(this.driver);
-			action.moveToElement(attendance).build().perform();
-			CommonOps.waitForElementToBeVisible(attendanceApproval, "attendanceApproval");
-			attendanceApproval.click();
+			CommonOps.excuteOpertionOnElement(driver, attendance, "Attendance", ElementOpertions.MOVETOELEMENT);
+//			Actions action=new Actions(this.driver);
+//			action.moveToElement(attendance).build().perform();
+			CommonOps.excuteOpertionOnElement(driver, attendanceApproval, "Attendance approval", ElementOpertions.CLICK);
+			//CommonOps.waitForElementToBeVisible(attendanceApproval, "attendanceApproval");
+			//attendanceApproval.click();
 			stepPass("Go to hours table");
 		}
 		catch (Exception e) {

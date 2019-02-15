@@ -86,6 +86,7 @@ public class Base {
 		//mainPageCrm.clickLogout();
 		finalizeReportTest();
 	}
+	
 	public static String getData (String nodeName) throws ParserConfigurationException, SAXException, IOException
 	{
 		File fXmlFile =new File("C://HoursConfig.xml");
@@ -123,6 +124,7 @@ public class Base {
 		try {
 			driver.get(url);
 			driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+			
 		}
 		catch (Exception e) {
 			fail(e.getMessage());
@@ -200,7 +202,23 @@ public class Base {
 	{
 		try
 		{
-			//test.log(LogStatus.PASS, description);
+			test.log(LogStatus.PASS, description);
+			//test.log(LogStatus.PASS, description+", see screenshut: " + test.addScreenCapture(takeSS()));
+			
+		
+		}
+		catch(Exception e)
+		{
+			fail("Exception stepPass("+description+")="+e.getMessage());
+		}
+		catch (AssertionError e) {
+			fail("AssertinoError stepPass("+description+")="+e.getMessage());
+		}
+	}
+	public static void stepPassWithScreenShut(String description)
+	{
+		try
+		{
 			test.log(LogStatus.PASS, description+", see screenshut: " + test.addScreenCapture(takeSS()));
 			
 		
@@ -330,7 +348,7 @@ public class Base {
 			while ((line = fileReader.readLine()) != null) {
 				String[] tokens = line.split(commaDelimiter);
 				 if (tokens.length > 0) {
-					 ReportType row = new ReportType(tokens[0],tokens[1],tokens[2],tokens[3]);
+					 ReportType row = new ReportType(tokens[0],tokens[1],tokens[2],tokens[3],tokens[4]);
 							 //(Long.parseLong(tokens[STUDENT_ID_IDX]), tokens[STUDENT_FNAME_IDX], tokens[STUDENT_LNAME_IDX], tokens[STUDENT_GENDER], Integer.parseInt(tokens[STUDENT_AGE]));
 					         //            students.add(student);
 					 days.add(row);
@@ -355,20 +373,25 @@ public class Base {
 		return null;
 	}
 
-	public static void paintSuccess(WebDriver driver, WebElement row) {
-		try {
-			((JavascriptExecutor)driver).executeScript("arguments[0].style.border='2px solid green';", row);
-		}
-		catch (Exception e) {
-			throw e;
-		}
+	public static void paintSuccess(WebDriver driver, WebElement row) throws IOException, ParserConfigurationException, SAXException {
+		
+	    	try {
+				((JavascriptExecutor)driver).executeScript("arguments[0].style.border='2px solid green';", row);
+				stepPass("Painted element "+row.getText()+" with green");
+			}
+			
+			catch (Exception e) {
+				stepFail(e.getMessage());
+			}
+	    	
 	}
-	public static void paintFail(WebDriver driver, WebElement row) {
+	public static void paintFail(WebDriver driver, WebElement row) throws IOException, ParserConfigurationException, SAXException {
 		try {
 			((JavascriptExecutor)driver).executeScript("arguments[0].style.border='2px solid red';", row);
+			stepPass("Painted element "+row.getText()+" with green");
 		}
 		catch (Exception e) {
-			throw e;
+			stepFail(e.getMessage());
 		}
 	}
 }

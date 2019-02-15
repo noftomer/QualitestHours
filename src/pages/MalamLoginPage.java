@@ -8,6 +8,9 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.*;
 import org.xml.sax.SAXException;
 
+import utilities.CommonOps;
+import utilities.ElementOpertions;
+
 public class MalamLoginPage extends  ManagePage {
 
 	@FindBy(how=How.ID,using="indexNumInput::content")
@@ -31,10 +34,14 @@ public class MalamLoginPage extends  ManagePage {
 	{
 		try
 		{
-			this.companyNumber.sendKeys(companyNumber);
-			this.employeeID.sendKeys(empID);
-			this.password.sendKeys(pass);
-			loginBtn.click();
+			CommonOps.typeTextInTexbox(driver, this.companyNumber, "Company number", companyNumber);
+			//this.companyNumber.sendKeys(companyNumber);
+			CommonOps.typeTextInTexbox(driver, this.employeeID, "ID", empID);
+			//this.employeeID.sendKeys(empID);
+			CommonOps.typeTextInTexbox(driver, this.password, "Password", pass);
+			//this.password.sendKeys(pass);
+			CommonOps.excuteOpertionOnElement(driver, loginBtn, "Login", ElementOpertions.CLICK);
+			//loginBtn.click();
 			stepPass("Filled login form->company , employeeid and password");
 		}
 		catch (Exception e) {

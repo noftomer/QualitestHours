@@ -9,6 +9,8 @@ import org.openqa.selenium.support.*;
 import org.xml.sax.SAXException;
 
 import utilities.Base;
+import utilities.CommonOps;
+import utilities.ElementOpertions;
 
 public class HilanetLogin extends ManagePage {
 	
@@ -28,9 +30,12 @@ public class HilanetLogin extends ManagePage {
 	public void fillForm(String userName,String password) throws IOException, ParserConfigurationException, SAXException
 	{
 		try {
-			this.userName.sendKeys(userName);
-			this.password.sendKeys(password);
-			this.btn.click();
+			CommonOps.typeTextInTexbox(driver, this.userName, "ID", userName);
+			//this.userName.sendKeys(userName);
+			CommonOps.typeTextInTexbox(driver, this.password, "Password", password);
+			//this.password.sendKeys(password);
+			CommonOps.excuteOpertionOnElement(driver, this.btn, "Eמאקר נואאםמ", ElementOpertions.CLICK);
+			//this.btn.click();
 			stepPass("Filled login form with id and password");
 		}
 		catch (Exception e) {

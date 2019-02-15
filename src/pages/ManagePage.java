@@ -10,6 +10,7 @@ public class ManagePage extends Base{
 	public ManagePage(WebDriver driver) {
 		this.driver=driver;
 	}
+	
 	public static void init()
 	{
 		hilanetCompanyPage=PageFactory.initElements(Base.driver, HilanetCompanyPage.class);

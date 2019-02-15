@@ -4,12 +4,21 @@ import java.util.*;
 public class WorkingDaysOfCurerntMonth {
 
 	public static void main(String[] args)  {
-        
-		int day=1;
-		for(;day<30;day++) {
-			System.out.println(day+", "+isWorkDay(day));
-		}
-		System.out.println("Finish");
+		 long start = System.currentTimeMillis();
+		    long end = start + 5000;
+		    while(true) {
+		        //do your code
+		        //
+		    	System.out.println(System.currentTimeMillis());
+		    	if(System.currentTimeMillis() > end) {
+		            break;
+		        }
+		    }
+//		int day=1;
+//		for(;day<30;day++) {
+//			System.out.println(day+", "+isWorkDay(day));
+//		}
+//		System.out.println("Finish");
     	
 	}
 	public static boolean isWorkDay(int dayInMonth) {

@@ -9,6 +9,7 @@ import org.openqa.selenium.support.*;
 import org.xml.sax.SAXException;
 
 import utilities.CommonOps;
+import utilities.ElementOpertions;
 
 public class MalamMainPage extends ManagePage {
 
@@ -36,9 +37,12 @@ public class MalamMainPage extends ManagePage {
 		{
 			
 			hideDashBoard();
-			presentDropDown.click();
-			CommonOps.waitForElementToBeVisible(pressnetOption, "Nochechut");
-			pressnetOption.click();
+			Thread.sleep(Integer.parseInt(getData("milis")));
+			CommonOps.excuteOpertionOnElement(driver,presentDropDown, "Present dropDown", ElementOpertions.CLICK);
+			//presentDropDown.click();
+			CommonOps.excuteOpertionOnElement(driver,pressnetOption, "Pressnet", ElementOpertions.CLICK);
+//			CommonOps.waitForElementToBeVisible(pressnetOption, "Nochechut");
+//			pressnetOption.click();
 			stepPass("Moved to hours table");
 		}
 		catch (Exception e) {

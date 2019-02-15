@@ -1,5 +1,5 @@
 package utilities;
 
 public enum ElementOpertions {
-	CLICK,CLEAR,SENDKEYS
+	CLICK,CLEAR,SENDKEYS,MOVETOELEMENT
 }

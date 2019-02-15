@@ -9,6 +9,8 @@ import org.openqa.selenium.support.*;
 import org.xml.sax.SAXException;
 
 import utilities.Base;
+import utilities.CommonOps;
+import utilities.ElementOpertions;
 
 public class HilanetCompanyPage extends ManagePage{
 
@@ -27,12 +29,14 @@ public class HilanetCompanyPage extends ManagePage{
 	{
 		try
 		{
-			companyID.sendKeys(companyNumber);
-			btnContinue.click();
+			CommonOps.typeTextInTexbox(driver, companyID, "Company number",companyNumber);
+			//companyID.sendKeys(companyNumber);
+			CommonOps.excuteOpertionOnElement(driver, btnContinue, "Continue button", ElementOpertions.CLICK);
+			//btnContinue.click();
 			stepPass("Filled the form with company number ");
 		}
 		catch (Exception e) {
-			// TODO: handle exception
+			
 			stepFail("didnt filled the form with company number because "+e.getMessage());
 			failOfTestCase(e.getMessage());
 		}

@@ -39,8 +39,9 @@ public class CommonOps extends Base{
 			fail(e.getMessage());
 		}
 	}
-	public static void excuteOpertionOnElement(WebDriver driver,WebElement element,ElementOpertions eo) {
+	public static void excuteOpertionOnElement(WebDriver driver,WebElement element,String elementName,ElementOpertions eo) throws IOException, ParserConfigurationException, SAXException {
 		try {
+			waitForElementToBeVisible(element, elementName);
 			switch (eo) {
 			case CLICK:
 				element.click();
@@ -48,32 +49,40 @@ public class CommonOps extends Base{
 			case CLEAR:
 				element.clear();
 				break;
+			case MOVETOELEMENT:
+				Actions action=new Actions(driver);
+				action.moveToElement(element).build().perform();
+				break;
 			default:
 				break;
 			}
+			stepPass(eo.name()+ " for element "+elementName);
 		}
 		catch (Exception e) {
 			// TODO: handle exception
+			stepFail(e.getMessage());
+			fail(e.getMessage());
 		}
 		catch (AssertionError ae) {
-			// TODO: handle exception
+			stepFail(ae.getMessage());
+			fail(ae.getMessage());
 		}
 	}
-	public static void excuteOpertionOnElement(WebDriver driver,WebElement element,ElementOpertions eo,String textToElement) {
+	public static void typeTextInTexbox(WebDriver driver,WebElement element,String elementName,String textToElement) throws IOException, ParserConfigurationException, SAXException {
 		try {
-			switch (eo) {
-			case SENDKEYS:
-				element.sendKeys(textToElement);
-				break;
-			default:
-				break;
-			}
+			waitForElementToBeVisible(element, elementName);
+			element.clear();
+			element.sendKeys(textToElement);	
+			if(element.getAttribute("type").toLowerCase().equals("password")) {textToElement=" ";}
+			stepPass("Typed "+textToElement+"into textbox "+elementName);
 		}
 		catch (Exception e) {
-			// TODO: handle exception
+			stepFail(e.getMessage());
+			fail(e.getMessage());
 		}
 		catch (AssertionError ae) {
-			// TODO: handle exception
+			stepFail(ae.getMessage());
+			fail(ae.getMessage());
 		}
 	}
 	
@@ -124,8 +133,8 @@ public class CommonOps extends Base{
 		}
 		catch (Exception e)
 		{
-			stepFail(elem+" didnt selected");
-			fail(e.getMessage());
+			stepFail(e.getMessage());
+			//fail(e.getMessage());
 		}
 	}
 	public static String getDropDownValue(WebElement elem) throws IOException, ParserConfigurationException, SAXException
@@ -197,31 +206,37 @@ public class CommonOps extends Base{
 	{
 		((JavascriptExecutor)driver).executeScript("arguments[0].style.border='2px solid blue'",element);
 	}
-	public static void waitForElementToBeVisible(WebElement element,String elementName) throws IOException, ParserConfigurationException, SAXException
+	public static WebElement waitForElementToBeVisible(WebElement element,String elementName) throws IOException, ParserConfigurationException, SAXException
 	{
+		WebElement visibleElement=null;
 		try
 		{
 			WebDriverWait wait=new WebDriverWait(driver, 5);
-			wait.until(ExpectedConditions.visibilityOf(element));
+			visibleElement=wait.until(ExpectedConditions.visibilityOf(element));
+			paintSuccess(driver, element);
+			
 			stepPass("element "+elementName+" is visible");
-		}
+		}		
 		catch (Exception e) {
 			stepFail("element "+elementName+" is not visible");
 			failOfTestCase(e.getMessage());
 		}
+		return visibleElement;
 	}
-	public static void waitForElementToBeClickable(WebElement element,String elementName) throws IOException, ParserConfigurationException, SAXException
+	public static WebElement waitForElementToBeClickable(WebElement element,String elementName) throws IOException, ParserConfigurationException, SAXException
 	{
+		WebElement clicableElement=null;
 		try
 		{
 			WebDriverWait wait=new WebDriverWait(driver, 5);
-			wait.until(ExpectedConditions.elementToBeClickable(element));
+			clicableElement=wait.until(ExpectedConditions.elementToBeClickable(element));
 			stepPass("element "+elementName+" is clickable");
 		}
 		catch (Exception e) {
 			stepFail("element "+elementName+" is not clickable");
 			failOfTestCase(e.getMessage());
 		}
+		return clicableElement;
 	}
 	public static void moveToElement(WebElement element,String elementName) throws IOException, ParserConfigurationException, SAXException
 	{
