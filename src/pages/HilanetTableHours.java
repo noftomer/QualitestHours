@@ -58,7 +58,7 @@ public class HilanetTableHours extends ManagePage{
 			{
 				if(f.getAttribute("id").equals(frame.getAttribute("id")))
 				{
-					this.driver.switchTo().frame(f);
+					this.driver.switchTo().frame(f); 
 					daysToReport=iterateOverDays();
 					driver.switchTo().defaultContent();
 					break;
@@ -127,6 +127,15 @@ public class HilanetTableHours extends ManagePage{
 		}
 		return daysToReport;
 	}
+	private String convertToUTF8(String s) {
+	    String out = null;
+	    try {
+	        out = new String(s.getBytes("UTF-8"), "ISO-8859-1");
+	    } catch (java.io.UnsupportedEncodingException e) {
+	        return null;
+	    }
+	    return out;
+	}
 	private List<ReportType> iterateOverDays() throws IOException, ParserConfigurationException, SAXException
 	{
 		List<ReportType> daysToReport=new ArrayList<ReportType>();
@@ -178,6 +187,7 @@ public class HilanetTableHours extends ManagePage{
 					
 					WebElement reportTypeElem=CommonOps.waitForElementToBeVisible(driver.findElement(By.xpath("//*[@id=\"ctl00_mp_rptInner_ctl"+number+"_tdRT\"]/div")),"Report day "+String.valueOf(number));
 					elements.add(reportTypeElem);
+					
 					String reportTypeText=reportTypeElem.getText();
 						((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true)",reportTypeElem);
 						

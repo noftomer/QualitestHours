@@ -16,6 +16,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -36,7 +37,7 @@ public class CommonOps extends Base{
 		catch (Exception e)
 		{
 			stepFail("Element "+elem+" not exists !");
-			fail(e.getMessage());
+			//fail(e.getMessage());
 		}
 	}
 	public static void excuteOpertionOnElement(WebDriver driver,WebElement element,String elementName,ElementOpertions eo) throws IOException, ParserConfigurationException, SAXException {
@@ -61,11 +62,11 @@ public class CommonOps extends Base{
 		catch (Exception e) {
 			// TODO: handle exception
 			stepFail(e.getMessage());
-			fail(e.getMessage());
+			//fail(e.getMessage());
 		}
 		catch (AssertionError ae) {
 			stepFail(ae.getMessage());
-			fail(ae.getMessage());
+			//fail(ae.getMessage());
 		}
 	}
 	public static void typeTextInTexbox(WebDriver driver,WebElement element,String elementName,String textToElement) throws IOException, ParserConfigurationException, SAXException {
@@ -78,11 +79,11 @@ public class CommonOps extends Base{
 		}
 		catch (Exception e) {
 			stepFail(e.getMessage());
-			fail(e.getMessage());
+			//fail(e.getMessage());
 		}
 		catch (AssertionError ae) {
 			stepFail(ae.getMessage());
-			fail(ae.getMessage());
+			//fail(ae.getMessage());
 		}
 	}
 	
@@ -98,12 +99,12 @@ public class CommonOps extends Base{
 		catch (Exception e)
 		{
 			stepFail("Problem with "+elem);
-			fail(e.getMessage());
+			//fail(e.getMessage());
 		}
 		catch (AssertionError ea)
 		{
 			stepFail("assert failed of "+expectedValue);
-			fail(ea.getMessage());
+			//fail(ea.getMessage());
 		}
 	}
 	
@@ -119,7 +120,7 @@ public class CommonOps extends Base{
 		catch (Exception e)
 		{
 			stepFail(elem+" didnt selected");
-			fail(e.getMessage());
+			//fail(e.getMessage());
 		}
 	}
 
@@ -150,7 +151,7 @@ public class CommonOps extends Base{
 		catch (Exception e)
 		{
 			stepFail("No "+elem+" found");
-			fail(e.getMessage());
+			//fail(e.getMessage());
 		}
 		return selectedValue;
 	}
@@ -165,7 +166,7 @@ public class CommonOps extends Base{
 		catch(Exception e)
 		{
 			stepFail("Didnt found alert");
-			failOfTestCase(e.getMessage());
+			//failOfTestCase(e.getMessage());
 		}
 	}
 	public static String monthNameIn3Letters(int month)
@@ -206,12 +207,40 @@ public class CommonOps extends Base{
 	{
 		((JavascriptExecutor)driver).executeScript("arguments[0].style.border='2px solid blue'",element);
 	}
-	public static WebElement waitForElementToBeVisible(WebElement element,String elementName) throws IOException, ParserConfigurationException, SAXException
+	public static WebElement waitForElementToBeVisible(WebElement element,String elementName) throws IOException, ParserConfigurationException, SAXException, InterruptedException
+	{
+		WebElement visibleElement=null;
+//		long startTime =System.currentTimeMillis();
+//		long currentTime =startTime;
+		//while(currentTime<startTime+5000){
+//		boolean found=false;
+//		while(!found) {
+			try {
+				WebDriverWait wait=new WebDriverWait(driver,10);
+				//visibleElement=wait.until(ExpectedConditions.visibilityOf(element));
+				visibleElement=wait.until(ExpectedConditions.elementToBeClickable(element));				
+				paintSuccess(driver, element);
+				stepPass("element "+elementName+" is visible");
+//				found=true;
+			}
+//			catch (StaleElementReferenceException e) {
+//				Thread.sleep(2500);
+//				//stepPass("Search for element "+elementName+" again");
+//				continue;
+//			}
+			catch (Exception e) {
+				stepFail("element "+elementName+" is not visible");
+			}
+//			currentTime =System.currentTimeMillis();
+//		}
+		return visibleElement;
+	}
+	public static WebElement waitForElementToBeVisible_original(WebElement element,String elementName) throws IOException, ParserConfigurationException, SAXException
 	{
 		WebElement visibleElement=null;
 		try
 		{
-			WebDriverWait wait=new WebDriverWait(driver, 5);
+			WebDriverWait wait=new WebDriverWait(driver, 30);
 			visibleElement=wait.until(ExpectedConditions.visibilityOf(element));
 			paintSuccess(driver, element);
 			
@@ -219,7 +248,7 @@ public class CommonOps extends Base{
 		}		
 		catch (Exception e) {
 			stepFail("element "+elementName+" is not visible");
-			failOfTestCase(e.getMessage());
+			//failOfTestCase(e.getMessage());
 		}
 		return visibleElement;
 	}
@@ -234,7 +263,7 @@ public class CommonOps extends Base{
 		}
 		catch (Exception e) {
 			stepFail("element "+elementName+" is not clickable");
-			failOfTestCase(e.getMessage());
+			//failOfTestCase(e.getMessage());
 		}
 		return clicableElement;
 	}
@@ -247,7 +276,7 @@ public class CommonOps extends Base{
 		}
 		catch (Exception e) {
 			stepFail("didnt Moved to element "+elementName);
-			failOfTestCase(e.getMessage());
+			//failOfTestCase(e.getMessage());
 			// TODO: handle exception
 		}
 	}

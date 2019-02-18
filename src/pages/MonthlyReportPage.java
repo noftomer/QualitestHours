@@ -73,10 +73,7 @@ public class MonthlyReportPage extends ManagePage {
 		
 	public void importHours(List<ReportType> days) throws IOException, ParserConfigurationException, SAXException
 	{
-		
-		//List<ReportType> days=null;
 		try {
-			//days=readCsvFile(fileName);
 			int dayCounter=0;
 			for(int day=0;day<days.size();day++) {
 				

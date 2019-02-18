@@ -3,17 +3,18 @@ package testCases;
 import java.util.*;
 public class WorkingDaysOfCurerntMonth {
 
-	public static void main(String[] args)  {
-		 long start = System.currentTimeMillis();
-		    long end = start + 5000;
-		    while(true) {
-		        //do your code
-		        //
-		    	System.out.println(System.currentTimeMillis());
-		    	if(System.currentTimeMillis() > end) {
-		            break;
-		        }
-		    }
+	public static void main(String[] args) throws InterruptedException  {
+		long startTime =System.currentTimeMillis();
+		long currentTime =startTime;
+		int x=1;
+		while(currentTime<startTime+10000){
+		    //Do something here
+		    Thread.sleep(1000);
+			System.out.println(x);
+			currentTime =System.currentTimeMillis();
+		    x++;
+		}
+	        System.out.println("Out of While loop");
 //		int day=1;
 //		for(;day<30;day++) {
 //			System.out.println(day+", "+isWorkDay(day));

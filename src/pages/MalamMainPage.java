@@ -26,7 +26,7 @@ public class MalamMainPage extends ManagePage {
 		super(driver);
 		// TODO Auto-generated constructor stub
 	}
-	private void hideDashBoard() throws IOException, ParserConfigurationException, SAXException {
+	private void hideDashBoard() throws IOException, ParserConfigurationException, SAXException, InterruptedException {
 		CommonOps.waitForElementToBeVisible(dashBoard, "dashboar");
 		((JavascriptExecutor)this.driver).executeScript("arguments[0].style.visibility='hidden';", dashBoard);
 		//visibility:hidden

@@ -33,7 +33,7 @@ public class ReportType {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "day="+getDay()+", enterHour="+getEntryTime()+", exitHour="+getExitTime()+", sum="+getTimePerDay()+", report type="+getReportType();
+		return "day='"+getDay()+"', enterHour='"+getEntryTime()+"', exitHour='"+getExitTime()+"', sum='"+getTimePerDay()+"', report type='"+getReportType()+"'";
 	}
 	
 	

@@ -59,7 +59,6 @@ public class Sanity extends Base{
 		malamMainPage.goToHoursTable();
 		
 		monthlyReportPage.importHours(hours);		
-//		monthlyReportPage.validateHoursFromSourceEqualsToDestintion(hours);
 		sleep();
 	}
 	//@Test

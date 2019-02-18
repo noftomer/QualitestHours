@@ -375,23 +375,12 @@ public class Base {
 
 	public static void paintSuccess(WebDriver driver, WebElement row) throws IOException, ParserConfigurationException, SAXException {
 		
-	    	try {
-				((JavascriptExecutor)driver).executeScript("arguments[0].style.border='2px solid green';", row);
-				stepPass("Painted element "+row.getText()+" with green");
-			}
+	    		((JavascriptExecutor)driver).executeScript("arguments[0].style.border='2px solid green';", row);
 			
-			catch (Exception e) {
-				stepFail(e.getMessage());
-			}
 	    	
 	}
 	public static void paintFail(WebDriver driver, WebElement row) throws IOException, ParserConfigurationException, SAXException {
-		try {
 			((JavascriptExecutor)driver).executeScript("arguments[0].style.border='2px solid red';", row);
-			stepPass("Painted element "+row.getText()+" with green");
-		}
-		catch (Exception e) {
-			stepFail(e.getMessage());
-		}
+		
 	}
 }
