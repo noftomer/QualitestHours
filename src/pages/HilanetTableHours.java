@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.xerces.util.SynchronizedSymbolTable;
+//import org.apache.xerces.util.SynchronizedSymbolTable;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.*;
 import org.xml.sax.SAXException;
@@ -136,35 +136,82 @@ public class HilanetTableHours extends ManagePage{
 	    }
 	    return out;
 	}
+	private void chooseCurrentMonth() throws IOException, ParserConfigurationException, SAXException {
+		String value=CommonOps.getDropDownValue(comboOptions);		
+		if(!value.equals("חודש נוכחי"))
+		{
+			CommonOps.selectDropDownByVisibleText(comboOptions, "חודש נוכחי");
+		}
+	}
 	private List<ReportType> iterateOverDays() throws IOException, ParserConfigurationException, SAXException
 	{
 		List<ReportType> daysToReport=new ArrayList<ReportType>();
 		try {
-			String value=CommonOps.getDropDownValue(comboOptions);		
-			if(!value.equals("חודש נוכחי"))
-			{
-				CommonOps.selectDropDownByVisibleText(comboOptions, "חודש נוכחי");
-			}
-			//String selector="table[id=tReps] tbody tr[id^=ctl00_mp_rptInner_ct]";
+			chooseCurrentMonth();
+     		boolean sameDay=false;
 			String begining="ctl00_mp_rptInner_ctl";
-			//int rows=driver.findElements(By.cssSelector(selector)).size();
 			int rows=rowsOfTable.size();
 			String number="";
+			Thread.sleep(1500);
+			String day="";
+			int numberOfCellsOfRow=driver.findElements(By.cssSelector("tr#ctl00_mp_rptInner_ctl00_trReps td")).size();
 			for(int i=0;i<rows;i++)
 			{
+				
 				try {
 					number=String.valueOf(i);
 					if(i<10) {
 						number="0"+number;
 					}
+					//tr tag css=ctl00_mp_rptInner_ctl11_trReps
+					//		     ctl00_mp_rptInner_ctl17_trReps
+					//			 ctl00_mp_rptInner_ctl21_trReps
+					//if css="tr#ctl00_mp_rptInner_ctl16_trReps td" count ==17 it's with day cell
+					//else if count==16 it's without tge day cell
 					List<WebElement> elements=new ArrayList<>();
+					///////////////////
+					int currentCellOfRow=driver.findElements(By.cssSelector("tr#ctl00_mp_rptInner_ctl"+number+"_trReps td")).size();
+					if(currentCellOfRow<numberOfCellsOfRow) {
+						//its the same day without day cell
+					sameDay=true;
+//						i++;
+//						number=String.valueOf(i);
+//						if(i<10) {
+//							number="0"+number;
+//						}
+						
+//						//enter
+//						//ctl00_mp_rptInner_ctl16_tdEntry
+//						//ctl00_mp_rptInner_ctl17_tdEntry
+//						
+//						//exit
+//						//ctl00_mp_rptInner_ctl16_tdExit
+//						//ctl00_mp_rptInner_ctl17_tdExit
+//						
+//						//sum
+//						//ctl00_mp_rptInner_ctl16_tdSum
+//						//ctl00_mp_rptInner_ctl17_tdSum
+					}
+					///////////////////////
+					if(!sameDay) {
 					WebElement dayElem=CommonOps.waitForElementToBeVisible(driver.findElement(By.id(begining+number+"_tdDay")), "day "+String.valueOf(number));
-					
+					//WebElement dayElem=CommonOps.waitForElementToBeVisible(driver.findElement(By.id(begining+number+"_tdDay")), "day "+String.valueOf(number), "/");
 					elements.add(dayElem);
-					String day=dayElem.getText();
-					day=day.substring(day.length()-5, day.length());
-					
+					//if(dayElem!=null) {
+						String currentDay=dayElem.getText();
+						currentDay=currentDay.substring(currentDay.length()-5, currentDay.length());
+						day=currentDay;
+//					}
+//					else {
+//						i++;
+//						number=String.valueOf(i);
+//						if(i<10) {
+//							number="0"+number;
+//						}
+//					}
+					}
 					WebElement enteryElem=CommonOps.waitForElementToBeVisible(driver.findElement(By.id(begining+number+"_tdEntry")), "Enter hour for day "+String.valueOf(number));
+					//WebElement enteryElem=CommonOps.waitForElementToBeVisible(driver.findElement(By.id(begining+number+"_tdEntry")), "Enter hour for day "+String.valueOf(number),":");
 					if(enteryElem.getText().equals(" ")) {
 						enteryElem=CommonOps.waitForElementToBeVisible(driver.findElement(By.id(begining+number+"_tdMEn")),"Enter hour for day "+String.valueOf(number));
 					}
@@ -194,12 +241,16 @@ public class HilanetTableHours extends ManagePage{
 					ReportType r=new ReportType(day, entry, exit, sum,reportTypeText);
 					System.out.println("Hilanet day is "+r);
 					stepPass("Found day "+r.toString());
-					
+					if(sameDay)
+					{
+						sameDay=false;
+							
+					}
 					daysToReport.add(r);
 				}
 				catch (Exception e) {
 					stepFail(e.getMessage());
-				}				
+				}
 			}	
 			System.out.println();
 			stepPass("Wrote the days");

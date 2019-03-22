@@ -16,7 +16,35 @@ import classes.ReportType;
 import utilities.*;
 
 public class Sanity extends Base{
-	
+	private List<ReportType> demoData(){
+			List<ReportType> hours=new ArrayList<>();
+		//hours.add(new ReportType("03/03", "08:00", "17:00", "09:00", ""));
+		//hours.add(new ReportType("04/03", "08:01", "17:01", "09:00", ""));
+		hours.add(new ReportType("05/03", "08:05", "17:02", "09:00", ""));
+		//hours.add(new ReportType("06/03", "08:00", "17:03", "09:00", ""));
+		//hours.add(new ReportType("07/03", "08:07", "17:04", "09:00", ""));
+		
+		hours.add(new ReportType("10/03", "08:45", "17:05", "09:00", ""));
+		hours.add(new ReportType("11/03", "08:23", "17:06", "09:00", ""));
+		//hours.add(new ReportType("12/03", "08:33", "17:07", "09:00", ""));
+		//hours.add(new ReportType("13/03", "08:55", "17:08", "09:00", ""));
+		//hours.add(new ReportType("14/03", "08:40", "17:09", "09:00", ""));
+		
+		hours.add(new ReportType("17/03", "08:30", "17:08", "09:00", ""));
+		hours.add(new ReportType("18/03", "08:20", "17:07", "09:00", ""));
+		//hours.add(new ReportType("19/03", "08:10", "17:06", "09:00", ""));
+		hours.add(new ReportType("20/03", "08:06", "17:05", "09:00", ""));
+		hours.add(new ReportType("21/03", "08:01", "17:04", "09:00", ""));
+		
+		//hours.add(new ReportType("24/03", "08:12", "17:03", "09:00", ""));
+		hours.add(new ReportType("25/03", "08:23", "17:02", "09:00", ""));
+		//hours.add(new ReportType("26/03", "08:13", "17:01", "09:00", ""));
+		hours.add(new ReportType("27/03", "08:12", "17:00", "09:00", ""));
+		hours.add(new ReportType("28/03", "08:11", "17:01", "09:00", ""));
+		
+		hours.add(new ReportType("31/03", "08:11", "17:01", "09:00", ""));
+		return hours;
+	}
 	@Test
 	public void copyHours_thisReportForHours() throws IOException, ParserConfigurationException, SAXException, NumberFormatException, InterruptedException
 	{	  
@@ -27,39 +55,16 @@ public class Sanity extends Base{
 		hilanetMainPage.goToHoursTable();
 		
 		List<ReportType> hours= hilanetTableHours.importHoursToFile();
-//		List<ReportType> hours=new ArrayList<>();
-////		hours.add(new ReportType("03/02", "08:00", "17:00", "09:00", ""));
-////		hours.add(new ReportType("04/02", "08:01", "17:01", "09:00", ""));
-//		hours.add(new ReportType("05/02", "08:05", "17:02", "09:00", ""));
-////		hours.add(new ReportType("06/02", "08:00", "17:03", "09:00", ""));
-////		hours.add(new ReportType("07/02", "08:07", "17:04", "09:00", ""));
+		hours=new ArrayList<>();
+//		goToUrl(getData("URLDestenion"));
+//		malamLoginPage.fillForm(getData("compnyDestinion"),
+//				getData("ID"),
+//				getData("PasswordDestenion"));		
+//		malamMainPage.goToHoursTable();
 //		
-//		hours.add(new ReportType("10/02", "08:45", "17:05", "09:00", ""));
-//		hours.add(new ReportType("11/02", "08:23", "17:06", "09:00", ""));
-////		hours.add(new ReportType("12/02", "08:33", "17:07", "09:00", ""));
-////		hours.add(new ReportType("13/02", "08:55", "17:08", "09:00", ""));
-////		hours.add(new ReportType("14/02", "08:40", "17:09", "09:00", ""));
-//		
-//		hours.add(new ReportType("17/02", "08:30", "17:08", "09:00", ""));
-//		hours.add(new ReportType("18/02", "08:20", "17:07", "09:00", ""));
-////		hours.add(new ReportType("19/02", "08:10", "17:06", "09:00", ""));
-//		hours.add(new ReportType("20/02", "08:06", "17:05", "09:00", ""));
-//		hours.add(new ReportType("21/02", "08:01", "17:04", "09:00", ""));
-//		
-////		hours.add(new ReportType("24/02", "08:12", "17:03", "09:00", ""));
-//		hours.add(new ReportType("25/02", "08:23", "17:02", "09:00", ""));
-////		hours.add(new ReportType("26/02", "08:13", "17:01", "09:00", ""));
-//		hours.add(new ReportType("27/02", "08:12", "17:00", "09:00", ""));
-//		hours.add(new ReportType("28/02", "08:11", "17:01", "09:00", ""));
-		
-		goToUrl(getData("URLDestenion"));
-		malamLoginPage.fillForm(getData("compnyDestinion"),
-				getData("ID"),
-				getData("PasswordDestenion"));		
-		malamMainPage.goToHoursTable();
-		
-		monthlyReportPage.importHours(hours);		
-		sleep();
+//		monthlyReportPage.importHours(hours);		
+//		sleep();
+		System.out.println("Finish");
 	}
 	//@Test
 	public void copyHoursFromExcelFile_thisReportForHoursFromExcelFile() throws Exception

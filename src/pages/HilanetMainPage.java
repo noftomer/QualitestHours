@@ -7,6 +7,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.xml.sax.SAXException;
@@ -16,11 +17,12 @@ import utilities.CommonOps;
 import utilities.ElementOpertions;
 
 public class HilanetMainPage extends ManagePage{
-
-	@FindBy(how=How.ID,using="tabItem_9_3_SpanBackground")
+	@FindBy(how=How.XPATH,using="//*[text() = 'נוכחות']")
+	//,@FindBy(how=How.ID,using="tabItem_9_3_SpanBackground")
 	private WebElement attendance;
 	
-	@FindBy(how=How.ID,using="innerNavBarItem_50")
+	//@FindBy(how=How.ID,using="innerNavBarItem_50")
+	@FindBy(how=How.XPATH,using="//*[text() = 'ריכוז דיווחים']")
 	private WebElement attendanceApproval;
 	
 	public HilanetMainPage(WebDriver driver) {

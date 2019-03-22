@@ -25,6 +25,8 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.xml.sax.SAXException;
 
+import net.sourceforge.htmlunit.cyberneko.filters.ElementRemover;
+
 public class CommonOps extends Base{
 	public static void verifyElementExists(WebElement elem) throws IOException, ParserConfigurationException, SAXException
 	{
@@ -207,6 +209,27 @@ public class CommonOps extends Base{
 	{
 		((JavascriptExecutor)driver).executeScript("arguments[0].style.border='2px solid blue'",element);
 	}
+	public static WebElement waitForElementToBeVisible(WebElement element,String elementName,String pattern) throws IOException, ParserConfigurationException, SAXException, InterruptedException
+	{
+		WebElement visibleElement=null;
+		boolean found=false;
+			try {
+				WebDriverWait wait=new WebDriverWait(driver,10);
+				found=wait.until(ExpectedConditions.textToBePresentInElement(element, pattern));
+				if(found) {
+					visibleElement=element;
+				}
+				paintSuccess(driver, element);
+				stepPass("element "+elementName+" is visible with text "+pattern);
+			}
+
+			catch (Exception e) {
+				stepFail("element "+elementName+" is not visible with text "+pattern);
+			}
+
+		return visibleElement;
+	}
+	
 	public static WebElement waitForElementToBeVisible(WebElement element,String elementName) throws IOException, ParserConfigurationException, SAXException, InterruptedException
 	{
 		WebElement visibleElement=null;
@@ -217,8 +240,8 @@ public class CommonOps extends Base{
 //		while(!found) {
 			try {
 				WebDriverWait wait=new WebDriverWait(driver,10);
-				//visibleElement=wait.until(ExpectedConditions.visibilityOf(element));
-				visibleElement=wait.until(ExpectedConditions.elementToBeClickable(element));				
+				visibleElement=wait.until(ExpectedConditions.visibilityOf(element));
+				//visibleElement=wait.until(ExpectedConditions.elementToBeClickable(element));				
 				paintSuccess(driver, element);
 				stepPass("element "+elementName+" is visible");
 //				found=true;
